@@ -2,7 +2,6 @@ package drivers
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 )
@@ -37,19 +36,9 @@ func (r RedisDriver) Listen(queue string, f func(err error, msg string, ack func
 			return
 		}
 
-		var body string
-		err = json.Unmarshal([]byte(msg.Payload), &body)
-
-		if err != nil {
-			f(err, "", func() {})
-			return
-		}
-
 		fmt.Println("Received message from " + msg.Channel + " channel.")
 
-		f(nil, body, func() {
-			fmt.Println("Ack")
-		})
+		f(nil, msg.Payload, func() { fmt.Println("Ack") })
 
 	}
 }
