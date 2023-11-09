@@ -2,7 +2,6 @@ package drivers
 
 import (
 	"context"
-	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 )
@@ -20,7 +19,6 @@ func (c *RabbitMQDrive) Listen(queue string, f func(err error, msg string, ack f
 		f(err, "", func() {})
 		return
 	}
-	fmt.Println("dddd")
 	for {
 		select {
 		case message := <-ch:
