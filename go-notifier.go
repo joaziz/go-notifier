@@ -6,8 +6,8 @@ import (
 	"github.com/joaziz/go-notifier/internal"
 )
 
-func NewInterNotifier(name string) *internal.Notifier {
-	return internal.New(name)
+func NewInterNotifier(name string, opt internal.Options) *internal.Notifier {
+	return internal.New(name, opt)
 }
 
 func NewExternalNotifier(driver drivers.DriverInterface) *external.Notifier {

@@ -10,6 +10,7 @@ type Notifier struct {
 	lock *sync.Mutex
 	list *channelList
 	name string
+	opt  Options
 }
 
 func (s *Notifier) Name() string {
@@ -20,7 +21,7 @@ func (s *Notifier) Register(id string, session string) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	s.list.RegisterToList(id, session)
-
+	s.opt.Logger.Info("Register new item", "id", id, "session", session)
 }
 
 func (s *Notifier) RegisterAndGet(id string, session string) (map[string]chan string, error) {
@@ -41,7 +42,7 @@ func (s *Notifier) Get(id string) (map[string]chan string, error) {
 	if _, ok := s.list.items[id]; ok {
 		return s.list.items[id], nil
 	}
-
+	s.opt.Logger.Error("Get item", "id", id)
 	return nil, errors.New("not found")
 }
 
@@ -50,7 +51,7 @@ func (s *Notifier) Deregister(id string, session string) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	s.list.DeregisterFromList(id, session)
-
+	s.opt.Logger.Info("Deregister item", "id", id, "session", session)
 }
 
 func (s *Notifier) IsExist(id string) bool {
@@ -71,8 +72,9 @@ func (s *Notifier) GetList() []string {
 	return list
 }
 
-func New(name string) *Notifier {
+func New(name string, opt Options) *Notifier {
 	return &Notifier{
+		opt:  opt,
 		name: name,
 		lock: &sync.Mutex{},
 		list: &channelList{
