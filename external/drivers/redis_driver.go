@@ -3,15 +3,15 @@ package drivers
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 type RedisDriver struct {
 	client *redis.Client
 }
 
-func NewRedisDriver(opt *redis.Options) *RedisDriver {
-	var redisClient = redis.NewClient(opt)
+func NewRedisDriver(redisClient *redis.Client) *RedisDriver {
+
 	return &RedisDriver{
 		client: redisClient,
 	}
