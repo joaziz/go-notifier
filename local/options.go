@@ -1,4 +1,4 @@
-package internal
+package local
 
 import "log/slog"
 
